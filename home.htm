@@ -25,18 +25,17 @@ overflow:hidden;
 height: 100%;
  background-color: #CCC;
  }
- 
-
-      header{  position: absolute;
+header {
+position: absolute;
 left: 0px;
 top: 0px;
 width: 99%;
-background: rgba(0,0,0,0.9);
+background: rgba(255, 255, 255, 0.73);
 z-index: 10000;
-color: white;
+color: black;
+font-family: "ubuntu", "Segoe Ui";
 padding: 20px;
-      }
-
+}
 .leaflet-popup-content-wrapper {
     background: black;
     color: white;
@@ -46,7 +45,7 @@ padding: 20px;
 }
 
 a.leaflet-popup-close-button {
-    font-size: 25px !important;
+   display:none;
 }
 
 .leaflet-popup-tip-container {
@@ -59,8 +58,8 @@ a.leaflet-popup-close-button {
   </head>
 <body>
 <header>
-<div> Sean Freeman</div>
-<div style='float:right'>  realnaturist@yandex.com<br />+91 7036758335</div>
+<div style='float:left'> Sean Freeman</div>
+<div style='float:right'>  realnaturist@yandex.com</div>
 </header>
 <div id="content"></div>
     
@@ -86,12 +85,12 @@ a.leaflet-popup-close-button {
 
 // after clicked use google map public api to get more info. 
         $.get(url, function(result){
-          
+           if(result.status == "OK"){
         var timeZone = result.timeZoneId;
         var date = new Date();         
         var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
         var data = "";
-        if(result.status == "OK"){
+       
           data = "<b>Latitude:</b> " + _event.latlng.lat.toString() + "<br><b>Longitude:</b> " + _event.latlng.lng.toString() + "<br><b>Timezone:</b> " + result.timeZoneId + "<br><b>UTC:</b> " +new Date(utc).toLocaleString()+ "<br><b>Local Time:</b> " + new Date(utc + (1000*(result.rawOffset))).toLocaleString();
         }
 
@@ -102,6 +101,8 @@ L.popup()
         });
 
       });
+
+
 
     </script>
   </body>
