@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+<meta charset="utf-8">
+    
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" rel="stylesheet" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <link href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" rel="stylesheet" />
+    <style type="text/css">
+     
+
+      html,
+      body {
+	width: 100%;
+       margin:0px;
+      height: 100%;
+overflow:hidden;
+        
+      }
+#content { 
+height: 100%;
+ background-color: #CCC;
+ }
+ 
+
+      header{  position: absolute;
+left: 0px;
+top: 0px;
+width: 99%;
+background: rgba(0,0,0,0.9);
+z-index: 10000;
+color: white;
+padding: 20px;
+      }
+
+.leaflet-popup-content-wrapper {
+    background: black;
+    color: white;
+    border-radius: 50px;
+    width: 240px;
+    text-align: center;
+}
+
+a.leaflet-popup-close-button {
+    font-size: 25px !important;
+}
+
+.leaflet-popup-tip-container {
+}
+
+.leaflet-popup-tip {
+    background-color: black;
+}
+         </style>
+  </head>
+<body>
+<header>
+<div> Sean Freeman</div>
+<div style='float:right'>  realnaturist@yandex.com<br />+91 7036758335</div>
+</header>
+<div id="content"></div>
+    
+     <script type="text/javascript">
+      
+     
+     
+// here is the actual js:
+
+ //get the map ready.
+        var map = L.map('content',{zoomControl: false}).setView([51.505, -0.09], 3);
+       
+//set tileLayer
+ L.tileLayer('https://{s}.tiles.mapbox.com/v4/{mapId}/{z}/{x}/{y}.png?access_token={token}', {
+            maxZoom: 8,
+            minZoom: 3,
+            bounceAtZoomLimits: false,
+             mapId: 'realnaturist.755d8a24',
+            token: 'pk.eyJ1IjoicmVhbG5hdHVyaXN0IiwiYSI6ImExOWY3NmJjNjY5N2YwY2NjYmM3N2JjMzUwNTdiZjNjIn0.VFpMVASIED3q_oNznMybLw'
+        }).addTo(map);
+        map.on('contextmenu', function(_event){
+        var url = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + _event.latlng.lat + ',' + _event.latlng.lng + '&timestamp=' + Math.floor(Date.now() / 1000);
+
+// after clicked use google map public api to get more info. 
+        $.get(url, function(result){
+          
+        var timeZone = result.timeZoneId;
+        var date = new Date();         
+        var utc = date.getTime() + (date.getTimezoneOffset() * 60000);
+        var data = "";
+        if(result.status == "OK"){
+          data = "<b>Latitude:</b> " + _event.latlng.lat.toString() + "<br><b>Longitude:</b> " + _event.latlng.lng.toString() + "<br><b>Timezone:</b> " + result.timeZoneId + "<br><b>UTC:</b> " +new Date(utc).toLocaleString()+ "<br><b>Local Time:</b> " + new Date(utc + (1000*(result.rawOffset))).toLocaleString();
+        }
+
+L.popup()
+          .setLatLng(_event.latlng)
+          .setContent(data)
+          .openOn(map);
+        });
+
+      });
+
+    </script>
+  </body>
+</html>
